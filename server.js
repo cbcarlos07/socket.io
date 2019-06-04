@@ -10,6 +10,13 @@ app.get('/', (req, res)=>{
 io.on('connection', (socket)=>{
     //console.log('new socket',socket)
     console.log('new socket',socket.id)
+    socket.on('msg', (msg)=>{
+        console.log(msg)
+        //socket.broadcast.emit('msg', socket.id+' connected')
+        socket.broadcast.emit('msg', msg)
+        //socket.emit('msg', msg)
+    })
+    
 })
 
 http.listen(3000, ()=>{

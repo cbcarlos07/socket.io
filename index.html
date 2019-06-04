@@ -7,11 +7,36 @@
     <title>Document</title>
     
 </head>
-<body>
+<body>    
     <h1>Socket.io</h1>
+    <div id="msgs"></div>
+    <input type="text" class="user" placeholder="Usuario">
+    <br>
+    <textarea name="" class="message" id="" cols="30" rows="10"></textarea>
+    
     <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script>
         const socket = io()
+        socket.on('connect', function(){
+            $('#msgs').append("connected with id: "+socket.id)
+            //socket.emit('msg','I am connected '+socket.id)
+            socket.emit('msg','I am connected '+socket.id+'<br>')
+        })
+        socket.on('msg', (msg) => {
+            $('#msgs').append(msg+'<br>')
+        })
+        $(function(){
+            $('.message').on('keydown',function(key){
+               // console.log(key.keyCode)
+                if( key.keyCode == 13 ){
+                    var msg = '<br><strong>'+ $('.user').val()+' diz </strong>: '+$(this).val()+"<br>"
+                    $('#msgs').append(msg)
+                    socket.emit('msg', msg )
+                    $(this).val('')
+                }
+            })
+        })
     </script>
 </body>
 </html>
